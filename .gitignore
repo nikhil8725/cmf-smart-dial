@@ -5,3 +5,8 @@ xcuserdata/
 DerivedData/
 build/
 dist/
+.venv/
+*.log
+__pycache__/
+*.dmg
+

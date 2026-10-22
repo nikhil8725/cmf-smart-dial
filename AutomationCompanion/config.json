@@ -1,0 +1,163 @@
+{
+  "service": {
+    "multi_press_timeout_ms": 380,
+    "max_workers": 4
+  },
+  "logging": {
+    "file": "trigger.log",
+    "level": "INFO",
+    "max_bytes": 5242880,
+    "backup_count": 3
+  },
+  "notifications": {
+    "enabled": true,
+    "title": "macOS Trigger Service",
+    "sound": "Tink"
+  },
+  "triggers": [
+    {
+      "id": "media_next_double_press",
+      "name": "Next Track (Double Press) -> API Webhook",
+      "enabled": true,
+      "trigger": {
+        "key": "media_next",
+        "press_count": 2
+      },
+      "action": {
+        "type": "api",
+        "params": {
+          "url": "https://httpbin.org/post",
+          "method": "POST",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Source": "mac-trigger-service"
+          },
+          "json_data": {
+            "event": "media_next_double_tap",
+            "device": "macOS",
+            "action": "skip_playlist"
+          },
+          "timeout_seconds": 5.0,
+          "include_context": true
+        }
+      },
+      "notify": {
+        "enabled": true,
+        "title": "Webhook Dispatched",
+        "message": "Triggered API POST to webhook endpoint (duration: {duration_ms}ms)",
+        "sound": "Hero"
+      }
+    },
+    {
+      "id": "media_prev_double_press",
+      "name": "Prev Track (Double Press) -> Shell Script",
+      "enabled": true,
+      "trigger": {
+        "key": "media_previous",
+        "press_count": 2
+      },
+      "action": {
+        "type": "shell",
+        "params": {
+          "script_path": "scripts/sample_action.sh",
+          "args": ["--source=double_tap_prev", "--mode=automation"],
+          "timeout_seconds": 10.0,
+          "env": {
+            "CUSTOM_PARAM": "my_workflow_value"
+          }
+        }
+      },
+      "notify": {
+        "enabled": true,
+        "title": "Shell Automation Ran",
+        "message": "{name} executed successfully:\n{output}",
+        "sound": "Glass"
+      }
+    },
+    {
+      "id": "media_play_pause_single",
+      "name": "Play/Pause (Single Press) -> Log Event",
+      "enabled": true,
+      "trigger": {
+        "key": "media_play_pause",
+        "press_count": 1
+      },
+      "action": {
+        "type": "logger",
+        "params": {
+          "target_file": "events.log",
+          "format": "json",
+          "message": "Play/Pause key pressed",
+          "include_frontmost_app": true
+        }
+      },
+      "notify": {
+        "enabled": false
+      }
+    },
+    {
+      "id": "hotkey_dark_mode",
+      "name": "Ctrl+Cmd+L -> Toggle macOS Dark Mode",
+      "enabled": true,
+      "trigger": {
+        "key": "<ctrl>+<cmd>+l",
+        "press_count": 1
+      },
+      "action": {
+        "type": "service",
+        "params": {
+          "operation": "toggle_dark_mode"
+        }
+      },
+      "notify": {
+        "enabled": true,
+        "title": "macOS Appearance Changed",
+        "message": "{output}",
+        "sound": "Pop"
+      }
+    },
+    {
+      "id": "hotkey_mute_audio",
+      "name": "Ctrl+Cmd+M -> Toggle Audio Mute",
+      "enabled": true,
+      "trigger": {
+        "key": "<ctrl>+<cmd>+m",
+        "press_count": 1
+      },
+      "action": {
+        "type": "service",
+        "params": {
+          "operation": "toggle_mute"
+        }
+      },
+      "notify": {
+        "enabled": true,
+        "title": "macOS Audio",
+        "message": "{output}",
+        "sound": "Purr"
+      }
+    },
+    {
+      "id": "hotkey_shell_uptime",
+      "name": "Ctrl+Alt+S -> Run Shell Command",
+      "enabled": true,
+      "trigger": {
+        "key": "<ctrl>+<alt>+s",
+        "press_count": 1
+      },
+      "action": {
+        "type": "shell",
+        "params": {
+          "command": "uname -mrs && sw_vers",
+          "timeout_seconds": 5.0
+        }
+      },
+      "notify": {
+        "enabled": true,
+        "title": "System Status",
+        "message": "{output}",
+        "sound": "Tink"
+      }
+    }
+  ]
+}

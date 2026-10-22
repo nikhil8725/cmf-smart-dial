@@ -26,6 +26,8 @@ struct DialView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// How many times each segment has become selected; drives its icon tick.
     @State private var tickCounts: [Int: Int] = [:]
+    @State private var dragStartAngle: Double? = nil
+    @State private var accumulatedDrag: Double = 0
 
     private var isShown: Bool { presentation.isShown }
 
@@ -59,9 +61,34 @@ struct DialView: View {
                 showsLabel: showsKnobLabel
             )
         }
-        .frame(width: DialGeometry.canvas, height: DialGeometry.canvas)
         .contentShape(Rectangle())
-        .gesture(SpatialTapGesture().onEnded { click(at: $0.location) })
+        .gesture(
+            DragGesture(minimumDistance: 3)
+                .onChanged { value in
+                    let dx = value.location.x - DialPath.centre.x
+                    let dy = value.location.y - DialPath.centre.y
+                    let currentAngle = atan2(dx, -dy) * 180 / .pi
+                    if let start = dragStartAngle {
+                        var delta = currentAngle - start
+                        if delta > 180 { delta -= 360 }
+                        else if delta < -180 { delta += 360 }
+                        accumulatedDrag += delta
+                        if abs(accumulatedDrag) >= 28.0 {
+                            let steps = Int(accumulatedDrag / 28.0)
+                            if steps != 0 {
+                                model.handle(.turn(steps), from: "dialDrag")
+                                accumulatedDrag -= Double(steps) * 28.0
+                            }
+                        }
+                    }
+                    dragStartAngle = currentAngle
+                }
+                .onEnded { _ in
+                    dragStartAngle = nil
+                    accumulatedDrag = 0
+                }
+        )
+        .simultaneousGesture(SpatialTapGesture().onEnded { click(at: $0.location) })
         .modifier(SummonEffect(isShown: isShown, reduceMotion: reduceMotion))
         .onChange(of: model.detentCount) {
             tickCounts[model.segmentIndex(of: model.selectedMode), default: 0] += 1

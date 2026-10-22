@@ -117,6 +117,9 @@ final class StatusItemController: NSObject, NSMenuDelegate {
         let settingsItem = NSMenuItem(title: "Settings…", action: #selector(showSettings), keyEquivalent: ",")
         settingsItem.target = self
         menu.addItem(settingsItem)
+        let virtualDial = NSMenuItem(title: "Virtual DialPad Controller…", action: #selector(toggleVirtualDialPad), keyEquivalent: "v")
+        virtualDial.target = self
+        menu.addItem(virtualDial)
         let guide = NSMenuItem(title: "Setup Guide…", action: #selector(showSetupGuide), keyEquivalent: "")
         guide.target = self
         menu.addItem(guide)
@@ -171,6 +174,11 @@ final class StatusItemController: NSObject, NSMenuDelegate {
 
     @objc private func showSettings() {
         onShowSettings?()
+    }
+
+    @objc private func toggleVirtualDialPad() {
+        VirtualDialPadPanel.shared.configure(with: model)
+        VirtualDialPadPanel.shared.toggleVisibility()
     }
 
     @objc private func showSetupGuide() {

@@ -1,92 +1,135 @@
-# Dial
+# CMF Smart Dial (Dial Pro)
 
-A macOS menu bar app that turns the Smart Dial on a CMF Buds Pro 2 case into a control surface for the Mac.
+[![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue.svg)](https://apple.com/macos)
+[![Swift](https://img.shields.io/badge/Swift-5.10%2B-orange.svg)](https://swift.org)
+[![Hardware](https://img.shields.io/badge/Hardware-CMF%20Buds%20Pro%202-red.svg)](https://cmf.tech)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-- **Double press** the dial: a wheel of nine modes drops from the menu bar.
-- **Turn** to pick a mode, **press** to choose it.
-- From then on every turn drives that mode (volume, brightness, apps, Mission Control, desktops, tabs, scroll, undo/redo, slides) until the next double press.
+**Turn the physical Smart Dial on a CMF Buds Pro 2 case into an interactive radial control surface and tactile macro controller for your Mac.**
 
-Requires macOS 14 or later, on Apple silicon or Intel.
+---
 
-## Install
+## 🌟 What is CMF Smart Dial?
 
-1. Download `Dial-1.0.dmg` from [Releases](https://github.com/athulrajt/dial/releases), open it and drag **Dial** into **Applications**.
-2. Open Dial from Applications. On another Mac, see [Opening on other Macs](#opening-on-other-macs) first.
-3. Follow the setup guide that opens on first launch:
-   - **Nothing X:** in the Nothing X app, set the Smart Dial's gestures to press → Play/Pause, double press → Next track, rotate → Volume.
-   - **Sound output:** connect the buds and choose them as the output. Keep the case lid **closed**; the dial only sends with the lid shut.
-   - **Accessibility:** turn on Dial in System Settings → Privacy & Security → Accessibility. Dial uses it to press keys, scroll and bring windows forward for you.
-   - **Launch at login**, if you want it.
+The **Nothing CMF Buds Pro 2** charging case features a physical rotary dial and button. This project bridges that hardware to macOS, turning it into a dedicated **radial desktop controller** (like a Microsoft Surface Dial, Contour Shuttle, or Loupedeck) for your menu bar.
 
-Click the menu bar item to open the wheel with the mouse. Right-click (or Control-click) it for Settings, the setup guide, About and Quit.
+### Core Experience:
+- 🔘 **Double-press the case dial:** A floating radial wheel of 9 control modes drops smoothly from your menu bar.
+- 🎛️ **Turn the dial:** The knob turns with mechanical audio click feedback to select a mode.
+- 👆 **Single press:** Locks in the mode.
+- 🔄 **Turn freely:** From then on, every physical rotation drives that mode (volume, brightness, browser tabs, spaces, scrubbing open apps, etc.) until your next double press!
 
-## Settings
+---
 
-- **Modes:** drag to reorder the ring. Turn modes off to skip them; they stay on the ring, dimmed.
-- **Press action per mode:** for example, Volume can play/pause your music or mute.
-- **Open Dial when you log in.**
-- **Testing tools:** ⌃⌥←/→ turn, ⌃⌥Space presses and ⌃⌥D double presses without the buds, plus a debug log. Off by default.
+## 🚀 Key Features & Enhancements
 
-Desktops mode needs "Move left a space" and "Move right a space" turned on in System Settings → Keyboard → Keyboard Shortcuts → Mission Control (they're on by default).
+### 1. 🎛️ Nine Native Desktop Control Modes
+- **Volume:** Adjust output volume with a live on-screen level meter HUD.
+- **Brightness:** Smooth hardware display brightness steps.
+- **Apps (Card Fan):** Fans out your running app windows across the screen like a physical card deck, letting you scrub and switch instantly.
+- **Mission Control:** Scrub open windows or trigger Mission Control views.
+- **Desktops / Spaces:** Flick between macOS virtual desktops smoothly.
+- **Browser Tabs:** Turn to scrub through browser tabs in Chrome, Safari, Brave, or Arc.
+- **Canvas & Document Scroll:** Smooth vertical scrolling through documents, timelines, or web pages.
+- **Undo / Redo:** Turn counter-clockwise to Undo (`⌘Z`) or clockwise to Redo (`⇧⌘Z`) with a live multiplier tally (`Undo ×4`).
+- **Presentation Slides:** Advance or rewind slides in Keynote, PowerPoint, or Google Slides.
 
-## Opening on other Macs
+---
 
-This build is signed with a local certificate, not an Apple Developer ID, so on any other Mac macOS will say it can't check the app. To open it anyway, Control-click Dial in Applications, choose **Open**, then **Open** again. Or remove the download flag:
+### 2. 🖱️ Interactive Virtual DialPad Controller (New!)
+Don't have your earbuds nearby or currently charging them in your ears?
+- Use the built-in **Virtual DialPad**: a floating circular controller you can keep on your desktop.
+- **Drag with mouse or trackpad** around the dial ring to rotate with fluid physical inertia.
+- **Two-finger trackpad / mouse scroll** directly over the dial.
+- **Click center knob** to single-press, **double-click** to toggle the radial menu!
 
-```
+---
+
+### 3. 🔊 Tactile Audio & Haptic Detent Clicks (New!)
+- Physical rotary encoders rely on tactile notches (detents). CMF Smart Dial plays crisp, subtle mechanical click sounds on every detent turn so you feel the feedback without needing to stare at the screen.
+
+---
+
+### 4. ⚙️ Automation & Power-User Companion
+Includes a standalone **Automation Companion Engine** (`AutomationCompanion/`) for power users who want the dial to trigger:
+- Custom Shell scripts and CLI commands
+- HTTP/REST API webhooks
+- Dark Mode and audio toggles
+- Background `launchd` service integration
+
+---
+
+## 🎧 How the CMF Hardware Talks to macOS
+
+The dial on the CMF Buds Pro 2 case communicates with the earbuds, which in turn send standard Bluetooth headphone commands to macOS:
+
+| Physical Case Gesture | Arrives on macOS as | What CMF Smart Dial Does |
+| :--- | :--- | :--- |
+| **Rotate Dial** | Bluetooth volume step | CoreAudio listener tracks direction (+/-) and resets volume to midpoint |
+| **Single Press** | `Play / Pause` media key | Selects mode or triggers mode-specific action |
+| **Double Press** | `Next Track` media key | Opens / closes the menu bar radial wheel |
+
+> **⚠️ CRITICAL REQUIREMENT:**
+> Keep the **case lid closed**! The CMF Buds Pro 2 dial only sends wireless commands when the case lid is completely shut.
+
+---
+
+## 📦 Installation & Setup
+
+### 1. Configure Gestures in Nothing X Mobile App
+1. Open the **Nothing X** app on your phone.
+2. Go to **Smart Dial settings** for your CMF Buds Pro 2:
+   - **Rotate:** Set to **Volume**
+   - **Single Press:** Set to **Play/Pause**
+   - **Double Press:** Set to **Next Track**
+
+### 2. Connect to your Mac
+1. Pair your CMF Buds Pro 2 with your Mac via Bluetooth.
+2. Select them as your active Sound Output in **Control Centre → Sound**.
+3. Close the charging case lid.
+
+### 3. Download & Run the App
+Download `Dial-1.0.dmg` from [Releases](https://github.com/nikhil8725/cmf-smart-dial/releases) (or build from source below), drag **Dial.app** into `/Applications`, and remove quarantine:
+```bash
 xattr -dr com.apple.quarantine /Applications/Dial.app
+open /Applications/Dial.app
 ```
 
-To ship without that step, sign with Developer ID and notarise. See [Releasing](#releasing).
+### 4. Accessibility Permissions
+Open **System Settings → Privacy & Security → Accessibility** and ensure **Dial** is enabled. This allows the app to send simulated keypresses (such as `⌘Tab`, `⌘Z`, and arrow keys).
 
-If Accessibility stops working after installing a new build, remove Dial from the Accessibility list and add it again, or run:
+---
 
-```
-tccutil reset Accessibility com.art.dial
-```
+## ⌨️ Built-in Testing Shortcuts (No Buds Required)
 
-## Building from source
+You can test and control the dial entirely from your keyboard:
+- `⌃⌥←` : Turn Left
+- `⌃⌥→` : Turn Right
+- `⌃⌥Space` : Press Knob
+- `⌃⌥D` : Double Press (Summon / Dismiss Radial Wheel)
 
-Needs Xcode and XcodeGen (`brew install xcodegen`).
+---
 
-```
-xcodegen
-xcodebuild -scheme Dial -configuration Debug -derivedDataPath build build
-open build/Build/Products/Debug/Dial.app
-```
+## 🛠️ Building from Source
 
-The Xcode project is generated from `project.yml`; don't edit `Dial.xcodeproj` by hand. The design spec is in `design/`, and the hardware findings are in `docs/phase0-findings.md`.
+Requirements: macOS 14+, [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
-## Releasing
+```bash
+# 1. Clone repository
+git clone https://github.com/nikhil8725/cmf-smart-dial.git
+cd cmf-smart-dial
 
-```
-Scripts/release.sh
-```
+# 2. Generate the Xcode project
+xcodegen generate
 
-This builds a universal Release (hardened runtime), checks the signature and writes `dist/Dial-<version>.dmg`. It signs with the local "Doey Local" certificate by default.
-
-With an Apple Developer account, install your Developer ID Application certificate and save notary credentials once:
-
-```
-xcrun notarytool store-credentials dial --apple-id you@example.com --team-id TEAMID
+# 3. Open in Xcode
+open Dial.xcodeproj
 ```
 
-Then:
+---
 
-```
-DIAL_SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" DIAL_NOTARY_PROFILE=dial Scripts/release.sh
-```
+## 📜 License & Credits
 
-That notarises and staples both the app and the DMG, so they open anywhere without a warning.
-
-The version lives in `project.yml` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`). The app icon is rendered from the dial itself:
-
-```
-build/Build/Products/Debug/Dial.app/Contents/MacOS/Dial --app-icon Dial/Assets.xcassets/AppIcon.appiconset/icon-1024.png
-```
-
-Then scale the smaller sizes from it with `sips`.
-
-## Licence
-
-MIT. See [LICENSE](LICENSE). Not affiliated with Nothing or CMF.
+- Built with Swift 5.10+ & SwiftUI for macOS 14 Sonoma / Sequoia.
+- Original concept inspired by [`athulrajt/dial`](https://github.com/athulrajt/dial).
+- Distributed under the [MIT License](LICENSE).

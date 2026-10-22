@@ -290,6 +290,7 @@ final class DialModel {
     // MARK: - Transitions
 
     private func beginPicking() {
+        DialAudio.playSummon()
         // Double press closes Mission Control without changing anything.
         if activeMode == .missionControl { handlers[.missionControl]?.deactivate() }
         phaseBeforePicking = phase
@@ -360,6 +361,7 @@ final class DialModel {
     }
 
     private func recordDetent() {
+        DialAudio.playClick()
         let now = Date()
         lastDetentInterval = lastDetentAt.map { now.timeIntervalSince($0) }
         lastDetentAt = now
