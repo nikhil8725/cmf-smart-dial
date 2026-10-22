@@ -206,6 +206,7 @@ final class DialModel {
             // The card flashes, then the fan and dial fold up.
             isFanOpen = false
             showHUD(.apps, text: action, afterChoose: true)
+            choose(.scroll)
 
         case (.inMode(let mode), .turn(let steps)):
             recordDetent()
