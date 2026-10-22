@@ -101,6 +101,7 @@ private struct ValueBump {
     var ink: Double = 0
 }
 
+#if DEBUG && canImport(PreviewsMacros)
 #Preview("Volume, dark") {
     HUDPreview(content: HUDContent(mode: .volume, reading: HUDReading(level: 0.68, text: "68"), afterChoose: false))
         .preferredColorScheme(.dark)
@@ -110,6 +111,7 @@ private struct ValueBump {
     HUDPreview(content: HUDContent(mode: .tabs, reading: HUDReading(level: nil, text: "Next ×2"), afterChoose: false))
         .preferredColorScheme(.light)
 }
+#endif
 
 /// A HUD on the canvas ground, as in the reference screenshots.
 struct HUDPreview: View {

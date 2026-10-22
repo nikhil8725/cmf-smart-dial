@@ -219,6 +219,7 @@ private struct SummonEffect: ViewModifier {
     }
 }
 
+#if DEBUG && canImport(PreviewsMacros)
 #Preview("Volume, dark") {
     DialPreview(selection: .volume)
         .preferredColorScheme(.dark)
@@ -233,6 +234,7 @@ private struct SummonEffect: ViewModifier {
     DialPreview(selection: .volume)
         .preferredColorScheme(.light)
 }
+#endif
 
 /// A dial on the canvas ground, as in the reference screenshots.
 struct DialPreview: View {

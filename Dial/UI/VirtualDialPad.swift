@@ -3,16 +3,12 @@ import SwiftUI
 
 /// A floating, tactile on-screen controller replicating the physical CMF Buds Pro 2 Smart Dial.
 /// Enables rotation via touch/mouse dragging, trackpad two-finger scrolling, and clicking the knob.
-public struct VirtualDialPadView: View {
-    @Bindable var model: DialModel
+struct VirtualDialPadView: View {
+    let model: DialModel
     @State private var dragAngle: Double = 0.0
     @State private var previousAngle: Double = 0.0
     @State private var isPressing: Bool = false
     @State private var accumulatedScroll: CGFloat = 0
-
-    public init(model: DialModel) {
-        self.model = model
-    }
 
     public var body: some View {
         ZStack {
@@ -194,8 +190,8 @@ public struct VirtualDialPadView: View {
 }
 
 /// Floating panel window for the Virtual DialPad.
-public final class VirtualDialPadPanel: NSPanel {
-    public static let shared = VirtualDialPadPanel()
+final class VirtualDialPadPanel: NSPanel {
+    static let shared = VirtualDialPadPanel()
 
     private init() {
         super.init(
@@ -215,12 +211,12 @@ public final class VirtualDialPadPanel: NSPanel {
         self.hasShadow = false
     }
 
-    public func configure(with model: DialModel) {
+    func configure(with model: DialModel) {
         let hosting = NSHostingView(rootView: VirtualDialPadView(model: model))
         self.contentView = hosting
     }
 
-    public func toggleVisibility() {
+    func toggleVisibility() {
         if isVisible {
             orderOut(nil)
         } else {
