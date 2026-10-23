@@ -61,10 +61,16 @@ sed -e 's/\$(EXECUTABLE_NAME)/Dial/g' \
 # Ensure PkgInfo is present
 printf "APPL????" > "$CONTENTS/PkgInfo"
 
-# Copy icons and asset catalog if present
-if [ -d "/Applications/Dial.app/Contents/Resources" ]; then
-    cp -R /Applications/Dial.app/Contents/Resources/* "$RESOURCES_DIR/" 2>/dev/null || true
+# Copy icons and asset catalog
+if [ -f "Dial/AppIcon.icns" ]; then
+    cp "Dial/AppIcon.icns" "$RESOURCES_DIR/AppIcon.icns"
 fi
+if [ -d "/Applications/Dial.app/Contents/Resources" ]; then
+    cp -R /Applications/Dial.app/Contents/Resources/Assets.car "$RESOURCES_DIR/" 2>/dev/null || true
+fi
+
+# Prevent Spotlight from indexing local build directory so only /Applications/Dial.app appears
+touch "$BUILD_DIR/.noindex"
 
 # Ad-hoc code sign so macOS Accessibility permissions work reliably
 echo "==> 4/4 Ad-hoc code signing app bundle..."
